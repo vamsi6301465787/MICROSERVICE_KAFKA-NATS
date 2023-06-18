@@ -1,0 +1,246 @@
+openapi: 3.0.0
+info:
+  title: STUDENT REGISTRATION FORM
+  description: STUDENT REGISTRATION
+  version: 0.0.1
+
+paths:
+  /GetAllStudent:
+    get:
+      summary: Get a list of students
+      tags:
+        - student
+      parameters:
+        - $ref: "#/components/parameters/limitParam"
+        - $ref: "#/components/parameters/directionParam"
+        - $ref: "#/components/parameters/sortByFieldParam"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StudentDetails"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          $ref: "#/components/responses/ResourceNotFoundError"
+
+
+  /GetStudent:
+    get:
+      summary: Get a student by Id
+      tags:
+        - student
+      parameters:
+        - $ref: "#/components/parameters/idParam"
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StudentDto"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          $ref: "#/components/responses/ResourceNotFoundError"
+        "422":
+          $ref: "#/components/responses/UnAcceptableInputs"
+
+  /StudentRegister:
+    post:
+      summary: Create a new student
+      tags:
+        - student
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StudentDto"
+        required: true
+      responses:
+        "201":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StudentDto"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          $ref: "#/components/responses/ResourceNotFoundError"
+        "422":
+          $ref: "#/components/responses/UnAcceptableInputs"
+
+  /UpdateStudent:
+    put:
+      summary: Update a student by Id
+      tags:
+        - student
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StudentUpdateDto"
+        required: true
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StudentUpdateDto"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          $ref: "#/components/responses/ResourceNotFoundError"
+        "422":
+          $ref: "#/components/responses/UnAcceptableInputs"
+
+  /DeleteStudent:
+    delete:
+      tags:
+        - student
+      parameters:
+        - $ref: "#/components/parameters/idParam"
+      responses:
+        "200":
+          $ref: "#/components/responses/Success"
+        "401":
+          $ref: "#/components/responses/UnauthorizedError"
+        "404":
+          $ref: "#/components/responses/ResourceNotFoundError"
+        "422":
+          $ref: "#/components/responses/UnAcceptableInputs"
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+  parameters:
+
+    idParam:
+      name: id
+      in: query
+      required: true
+      schema:
+        type: string
+    limitParam:
+      name: Limit
+      in: query
+      required: false
+      schema:
+        type: integer
+    directionParam:
+      name: Direction
+      in: query
+      required: false
+      schema:
+        type: string
+        enum:
+          - asc
+          - desc
+        default: asc
+    sortByFieldParam:
+      name: SortByField
+      in: query
+      required: false
+      schema:
+        type: string
+        nullable: true
+  responses:
+    Success:
+      description: Success
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              id:
+                type: string
+              rollnumber:
+                type: string
+              message:
+                type: string
+           
+    ResourceNotFoundError:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/MessageDto"
+    UnauthorizedError:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/MessageDto"
+    UnAcceptableInputs:
+      description: Invalid Inputs
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/MessageDto"
+  schemas:
+    MessageDto:
+      type: object
+      properties:
+        message:
+          type: string
+      required:
+        - message
+    StudentDetails:
+      type: object
+      properties:
+        totalCount:
+          type: integer
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/StudentDto"
+    StudentDto:
+      type: object
+      properties:
+        id: 
+          type: string
+        createdAt:
+          type: string
+          format: timestamp                                                
+        rollnumber:
+          type: string
+        email:
+          type: string
+          format: email
+        name:
+          type: string
+        isExist:
+          type: boolean
+      required:
+        - rollnumber
+        - name
+        - email
+
+    StudentUpdateDto:
+      type: object
+      properties:
+        id: 
+          type: string
+        createdAt:
+          type: string
+          format: timestamp                                                
+        rollnumber:
+          type: string
+        email:
+          type: string
+          format: email
+        name:
+          type: string
+        isExist:
+          type: boolean
+      required:
+        - rollnumber
+        - name
+        - email
+      

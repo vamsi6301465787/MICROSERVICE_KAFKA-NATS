@@ -1,0 +1,9 @@
+node_modules
+build/
+dist/
+.env
+key.json
+
+# "engines": {
+# 		"node": "18.14.1"
+# 	},
