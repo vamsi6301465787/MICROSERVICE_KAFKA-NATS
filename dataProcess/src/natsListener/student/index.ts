@@ -12,7 +12,7 @@ export class StudentNats {
         const payload = JSON.parse(decoder.decode(m.data));
         if (payload.type == "get") {
           const finalres = studentStore[payload.id];
-          if (finalres && finalres.isExist == true) {
+          if (finalres && finalres.isExist == true || finalres.isExist == false) {
             if (m.respond(sc.encode(JSON.stringify(finalres)))) {
               console.info(`[student] handled #${sub.getProcessed()}`);
             } else {
@@ -34,7 +34,7 @@ export class StudentNats {
           const allstudent: any = studentStore;
           // const limit = payload.limit;
           let finalRes = Object.values(allstudent).filter((item: any) => {
-            return item.id == payload.id && item.isExist;
+            return item.departmentno == payload.departmentno && item.isExist == true || item.isExist == false;
           });
           // if (limit) {
           //   finalRes = finalRes.slice(0, limit);

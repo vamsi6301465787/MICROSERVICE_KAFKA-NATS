@@ -12,7 +12,6 @@ const kafka = new Kafka({
 import { connect, StringCodec } from "nats";
 import { TextEncoder } from "text-encoding";
 
-// import Student from "../../../dist/api/student";
 
 
 export class StudentService {
@@ -27,11 +26,12 @@ export class StudentService {
 	/* *
 	 ! Todo: Implement pagination for this service
 	*/
-	async getAll(limit: number | undefined, direction: Api.DirectionParamEnum | undefined, sortByField: string | null | undefined): Promise<t.GetGetAllStudentResponse> {
+	async getAll(departmentno: string,limit: number | undefined, direction: Api.DirectionParamEnum | undefined, sortByField: string | null | undefined): Promise<t.GetGetAllStudentResponse> {
 		try {
 			const nc = await connect({ servers: nat_server });
 			const sc = StringCodec();
 			const data = {
+				departmentno:departmentno,
 				type: "getAll"
 			};
 			const ddata = JSON.stringify(data);
@@ -187,7 +187,7 @@ export class StudentService {
 		}
 	}
 
-	async update(request: Api.StudentUpdateDto): Promise<t.PutUpdateStudentResponse> {
+	async update(request: Api.StudentDto): Promise<t.PutUpdateStudentResponse> {
 		try {
 			if (!request) {
 				throw new Error("invalid-inputs");

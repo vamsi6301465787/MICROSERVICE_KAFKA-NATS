@@ -11,6 +11,7 @@ paths:
       tags:
         - student
       parameters:
+        - $ref: "#/components/parameters/idParam1"
         - $ref: "#/components/parameters/limitParam"
         - $ref: "#/components/parameters/directionParam"
         - $ref: "#/components/parameters/sortByFieldParam"
@@ -82,7 +83,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/StudentUpdateDto"
+              $ref: "#/components/schemas/StudentDto"
         required: true
       responses:
         "200":
@@ -90,7 +91,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/StudentUpdateDto"
+                $ref: "#/components/schemas/StudentDto"
         "401":
           $ref: "#/components/responses/UnauthorizedError"
         "404":
@@ -100,6 +101,7 @@ paths:
 
   /DeleteStudent:
     delete:
+      summary: Delete particular  student
       tags:
         - student
       parameters:
@@ -123,6 +125,12 @@ components:
 
     idParam:
       name: id
+      in: query
+      required: true
+      schema:
+        type: string
+    idParam1:
+      name: departmentno
       in: query
       required: true
       schema:
@@ -203,6 +211,8 @@ components:
     StudentDto:
       type: object
       properties:
+        departmentno:
+          type: string
         id: 
           type: string
         createdAt:
@@ -222,25 +232,25 @@ components:
         - name
         - email
 
-    StudentUpdateDto:
-      type: object
-      properties:
-        id: 
-          type: string
-        createdAt:
-          type: string
-          format: timestamp                                                
-        rollnumber:
-          type: string
-        email:
-          type: string
-          format: email
-        name:
-          type: string
-        isExist:
-          type: boolean
-      required:
-        - rollnumber
-        - name
-        - email
+    # StudentUpdateDto:
+    #   type: object
+    #   properties:
+    #     id: 
+    #       type: string
+    #     createdAt:
+    #       type: string
+    #       format: timestamp                                                
+    #     rollnumber:
+    #       type: string
+    #     email:
+    #       type: string
+    #       format: email
+    #     name:
+    #       type: string
+    #     isExist:
+    #       type: boolean
+    #   required:
+    #     - rollnumber
+    #     - name
+    #     - email
       
